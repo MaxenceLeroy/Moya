@@ -11,7 +11,7 @@ import OHHTTPStubsSwift
 @testable import ReactiveMoya
 
 func beIdenticalToResponse(_ expectedValue: Moya.Response) -> Predicate<Moya.Response> {
-    return Predicate { expression in
+    Predicate { expression in
         let test: Bool
         if let value = try expression.evaluate(), value == expectedValue {
             test = true
