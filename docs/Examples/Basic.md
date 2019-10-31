@@ -15,12 +15,12 @@ enum MyService {
 ```
 
 This enum is used to make sure that you provide implementation details for each
-target (at compile time). You can see that parameters needed for requests can be defined as per the enum cases parameters. The enum *must* additionally conform to the `TargetType` protocol. Let's get this done via an extension in the same file:
+target (at compile time). You can see that parameters needed for requests can be defined as per the enum cases parameters. The enum _must_ additionally conform to the `TargetType` protocol. Let's get this done via an extension in the same file:
 
 ```swift
 // MARK: - TargetType Protocol Implementation
 extension MyService: TargetType {
-    var baseURL: URL { return URL(string: "https://api.myservice.com")! }
+    var baseURL: URL { URL(string: "https://api.myservice.com")! }
     var path: String {
         switch self {
         case .zen:
@@ -77,11 +77,11 @@ extension MyService: TargetType {
 // MARK: - Helpers
 private extension String {
     var urlEscaped: String {
-        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
 
     var utf8Encoded: Data {
-        return data(using: .utf8)!
+        Data(self.utf8)
     }
 }
 ```
@@ -149,7 +149,7 @@ let failureEndpointClosure = { (target: MyService) -> Endpoint in
 }
 ```
 
-Notice that returning sample data is *required*. One of the key benefits of Moya
+Notice that returning sample data is _required_. One of the key benefits of Moya
 is that it makes testing the app or running the app using stubbed responses for
 API calls really easy.
 
@@ -171,14 +171,14 @@ provider.request(.zen) { result in
 }
 ```
 
-The `request` method is given a `MyService` value (`.zen`), which contains *all the
-information necessary* to create the `Endpoint` – or to return a stubbed
+The `request` method is given a `MyService` value (`.zen`), which contains _all the
+information necessary_ to create the `Endpoint` – or to return a stubbed
 response during testing.
 
 The `Endpoint` instance is used to create a `URLRequest` (the heavy lifting is
-done via Alamofire), and the request is sent (again - Alamofire).  Once
+done via Alamofire), and the request is sent (again - Alamofire). Once
 Alamofire gets a response (or fails to get a response), Moya will wrap the
-success or failure in a `Result` enum.  `result` is either
+success or failure in a `Result` enum. `result` is either
 `.success(Moya.Response)` or `.failure(MoyaError)`.
 
 You will need to unpack the data and status code from `Moya.Response`.
@@ -197,8 +197,8 @@ provider.request(.zen) { result in
 }
 ```
 
-Take special note: a `.failure` means that the server either didn't *receive the
-request* (e.g. reachability/connectivity error) or it didn't send a response
+Take special note: a `.failure` means that the server either didn't _receive the
+request_ (e.g. reachability/connectivity error) or it didn't send a response
 (e.g. the request timed out). If you get a `.failure`, you probably want to
 re-send the request after a time delay or when an internet connection is
 established.
